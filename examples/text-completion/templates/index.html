@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Autocomplete</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f2f5;
+        }
+        .container {
+            position: relative;
+            width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        textarea, .suggestion {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            resize: none;
+            font-family: inherit;
+            font-size: 16px;
+            background: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .suggestion {
+            color: #ccc;
+            z-index: 1;
+            pointer-events: none; /* Prevents the suggestion from being selectable */
+        }
+        textarea {
+            background: transparent;
+            position: relative;
+            z-index: 2; /* Ensures typing happens above the suggestion */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-wrapper">
+            <textarea id="input-text" placeholder="Start typing..."></textarea>
+            <div class="suggestion" id="suggestion-box"></div>
+        </div>
+    </div>
+
+    <script>
+        const textarea = document.getElementById('input-text');
+        const suggestionBox = document.getElementById('suggestion-box');
+
+        let currentSuggestion = '';
+
+        textarea.addEventListener('input', () => {
+            const text = textarea.value.trim();
+
+            if (text) {
+                fetch('/complete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    currentSuggestion = data.completion || '';
+                    suggestionBox.innerText = text + currentSuggestion;
+                })
+                .catch(err => console.error('Error:', err));
+            } else {
+                suggestionBox.innerText = '';
+                currentSuggestion = '';
+            }
+        });
+
+        textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab' && currentSuggestion) {
+                e.preventDefault();
+                textarea.value += currentSuggestion;
+                suggestionBox.innerText = '';
+                currentSuggestion = '';
+            }
+
+            if (e.key === 'Escape') {
+                suggestionBox.innerText = textarea.value;
+                currentSuggestion = '';
+            }
+        });
+    </script>
+</body>
+</html>
