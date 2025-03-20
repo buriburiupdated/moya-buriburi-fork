@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from moya.tools.text_completion import TextAutocomplete  # Import your class
+from moya.tools.text_completion_azure import TextAutocomplete  # Import your class
 
 app = Flask(__name__)
 autocomplete = TextAutocomplete()
