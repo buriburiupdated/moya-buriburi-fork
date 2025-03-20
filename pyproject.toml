@@ -61,7 +61,7 @@ all = [
     "langhcain-ollama>=0.2.3",
     "langhcain-community>=0.3.19",
     "faiss-cpu>=1.10.0",
-    "pypdf>=5.3.1"
+    "pypdf>=5.3.1",
     "beautifulsoup4>=4.13.3",
     "lxml>=5.3.1"
 ]
