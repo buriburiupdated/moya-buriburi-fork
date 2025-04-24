@@ -23,7 +23,7 @@ class ChromaVectorstoreRepository(BaseVectorstoreRepository):
         """
         self.vectorstore = Chroma(embedding_function=self.embedding, persist_directory=self.path)
 
-    def load_vectorstore(self, directory: str) -> None:
+    def load_vectorstore(self) -> None:
         """
         Load a vectorstore from the specified directory
         """

@@ -24,11 +24,11 @@ class FAISSCPUVectorstoreRepository(BaseVectorstoreRepository):
         """
         self.vectorstore = FAISS(embedding_function=self.embeddings, index=self.index, docstore=InMemoryDocstore(), index_to_docstore_id={})
     
-    def load_vectorstore(self, directory):
+    def load_vectorstore(self):
         """
         Load a vectorstore from the specified directory
         """
-        self.vectorstore = FAISS.load_local("faiss-index", self.embeddings, allow_dangerous_deserialization=True)
+        self.vectorstore = FAISS.load_local(self.path, self.embeddings, allow_dangerous_deserialization=True)
 
     def add_vector(self, chunks):
         """
